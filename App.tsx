@@ -1,10 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { INITIAL_SEATS } from './constants';
 import { Seat } from './types';
-<<<<<<< HEAD
-=======
 import { DataService } from './services/dataService';
->>>>>>> 8039d9f (Update project files)
 import Dashboard from './components/Dashboard';
 import SeatDetail from './components/SeatDetail';
 import AdminPanel from './components/AdminPanel';
@@ -12,42 +9,16 @@ import AdminLogin from './components/AdminLogin';
 
 type ViewMode = 'DASHBOARD' | 'SEAT_DETAIL' | 'ADMIN_PANEL';
 
-<<<<<<< HEAD
-const STORAGE_KEY = 'election_data_2026';
-
-const App: React.FC = () => {
-  // Initialize seats from localStorage or use initial constants
-  const [seats, setSeats] = useState<Seat[]>(() => {
-    const savedData = localStorage.getItem(STORAGE_KEY);
-    if (savedData) {
-      try {
-        return JSON.parse(savedData);
-      } catch (e) {
-        console.error("Failed to parse saved election data", e);
-        return INITIAL_SEATS;
-      }
-    }
-    return INITIAL_SEATS;
-  });
-
-=======
 const App: React.FC = () => {
   const [seats, setSeats] = useState<Seat[]>(INITIAL_SEATS);
   const [isSyncing, setIsSyncing] = useState(false);
   const [lastSynced, setLastSynced] = useState<Date | null>(null);
   
->>>>>>> 8039d9f (Update project files)
   const [selectedSeatId, setSelectedSeatId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('DASHBOARD');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
-<<<<<<< HEAD
-  // Persistence effect: Save seats to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(seats));
-  }, [seats]);
-=======
   // অ্যাপ লোড হওয়ার সময় ডাটাবেস থেকে ডাটা আনা
   useEffect(() => {
     const loadInitialData = async () => {
@@ -63,19 +34,13 @@ const App: React.FC = () => {
     const interval = setInterval(loadInitialData, 120000);
     return () => clearInterval(interval);
   }, []);
->>>>>>> 8039d9f (Update project files)
 
   const selectedSeat = useMemo(() => 
     seats.find(s => s.id === selectedSeatId) || null
   , [seats, selectedSeatId]);
 
-<<<<<<< HEAD
-  const updateVotes = (seatId: string, centerId: number, votes: Record<string, number>, invalidVotes: number) => {
-    setSeats(prevSeats => prevSeats.map(seat => {
-=======
   const updateVotes = async (seatId: string, centerId: number, votes: Record<string, number>, invalidVotes: number) => {
     const updatedSeats = seats.map(seat => {
->>>>>>> 8039d9f (Update project files)
       if (seat.id !== seatId) return seat;
       return {
         ...seat,
@@ -84,15 +49,6 @@ const App: React.FC = () => {
           return { ...center, votes, invalidVotes, isReported: true };
         })
       };
-<<<<<<< HEAD
-    }));
-  };
-
-  const resetData = () => {
-    if (window.confirm('আপনি কি নিশ্চিত যে আপনি সকল তথ্য মুছে ফেলে রিসেট করতে চান? এই কাজ আর ফিরিয়ে নেওয়া যাবে না।')) {
-      setSeats(INITIAL_SEATS);
-      localStorage.removeItem(STORAGE_KEY);
-=======
     });
 
     setSeats(updatedSeats);
@@ -109,13 +65,10 @@ const App: React.FC = () => {
       await DataService.saveData(INITIAL_SEATS);
       setLastSynced(new Date());
       setIsSyncing(false);
->>>>>>> 8039d9f (Update project files)
       alert('সকল তথ্য রিসেট করা হয়েছে।');
     }
   };
 
-<<<<<<< HEAD
-=======
   const handleManualRefresh = async () => {
     setIsSyncing(true);
     const data = await DataService.fetchLatestData();
@@ -124,7 +77,6 @@ const App: React.FC = () => {
     setIsSyncing(false);
   };
 
->>>>>>> 8039d9f (Update project files)
   const handleSeatSelect = (id: string) => {
     setSelectedSeatId(id);
     setViewMode('SEAT_DETAIL');
@@ -162,8 +114,6 @@ const App: React.FC = () => {
           </div>
           
           <div className="flex items-center space-x-2 sm:space-x-6">
-<<<<<<< HEAD
-=======
             <div className="flex items-center space-x-3 pr-4 border-r mr-2">
                 <div className={`flex items-center space-x-1.5 px-2 py-1 rounded-full ${isSyncing ? 'bg-blue-50' : 'bg-green-50'}`}>
                     <svg className={`w-3.5 h-3.5 ${isSyncing ? 'text-blue-500 animate-spin' : 'text-green-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -175,7 +125,6 @@ const App: React.FC = () => {
                 </div>
             </div>
 
->>>>>>> 8039d9f (Update project files)
             <div className="hidden md:flex items-center space-x-2">
                 <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -219,9 +168,6 @@ const App: React.FC = () => {
 
       <main className="max-w-7xl mx-auto px-4 mt-8 flex-grow w-full">
         {viewMode === 'DASHBOARD' && (
-<<<<<<< HEAD
-          <Dashboard seats={seats} onSeatSelect={handleSeatSelect} />
-=======
           <>
             <div className="flex justify-end mb-4">
                 <button 
@@ -237,7 +183,6 @@ const App: React.FC = () => {
             </div>
             <Dashboard seats={seats} onSeatSelect={handleSeatSelect} />
           </>
->>>>>>> 8039d9f (Update project files)
         )}
         
         {viewMode === 'SEAT_DETAIL' && selectedSeat && (
@@ -258,10 +203,7 @@ const App: React.FC = () => {
           />
         )}
       </main>
-<<<<<<< HEAD
-=======
 
->>>>>>> 8039d9f (Update project files)
       {/* Footer Section */}
       <footer className="bg-white border-t mt-12 py-8">
         <div className="max-w-7xl mx-auto px-4 text-center">
@@ -272,13 +214,9 @@ const App: React.FC = () => {
                 <div className="w-6 h-6 rounded-full overflow-hidden grayscale">
                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Government_Seal_of_Bangladesh.svg/1024px-Government_Seal_of_Bangladesh.svg.png" alt="Govt Logo" className="w-full h-full object-contain" />
                 </div>
-<<<<<<< HEAD
-                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">সরকারি নির্বাচন পোর্টাল (সংরক্ষিত ডেটাবেস সক্রিয়)</span>
-=======
                 <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
                     সেন্ট্রাল ডাটাবেস পোর্টাল {lastSynced ? `| সর্বশেষ সিঙ্ক: ${lastSynced.toLocaleTimeString()}` : ''}
                 </span>
->>>>>>> 8039d9f (Update project files)
             </div>
         </div>
       </footer>
